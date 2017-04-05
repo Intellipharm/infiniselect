@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>InfiniSelect Demo</title>
+        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        
+        <script src="bower_components/clusterize/clusterize.min.js"></script>
+        <link rel="stylesheet" href="bower_components/clusterize/clusterize.css" />
+        
+        <link rel="stylesheet" href="infiniselect.css" />
+        <script src="infiniselect.js"></script>
+    </head>
+    <body>
+        <h1>InfiniSelect Demo</h1>
+        
+        <div id="my_box"></div>
+        
+        <script>
+            var box = InfiniSelect(document.getElementById('my_box'), {
+                searchTimer: 500,
+                search: function(search, rowCount, callback) {
+                    setTimeout(function() {
+                        callback({
+                            data: [{content: 'smith'}, {content: 'jones'}, {content: 'buble'}]
+                        });
+                    }, 2500);
+                },
+                loadNextPage: function(rowCount, callback) {
+                    var data = [];
+
+                    for (var i = rowCount + 35; i < rowCount + 1035; i++) {
+                        data = data.concat([{content: '<i class="fa fa-star fa-spin"></i> - ' + String.fromCharCode(i)}]);
+                    }
+                    
+                    setTimeout(function() {
+                        callback({
+                            data: data
+                        });
+                    }, 2500);
+                }
+            });
+            console.log(box);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "infiniselect",
+  "version": "0.1.0",
+  "description": "Infinite Scroll Select Box",
+  "main": "infiniselect.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Intellipharm/infiniselect.git"
+  },
+  "keywords": [
+    "Infinite",
+    "Scroll",
+    "Select",
+    "Box"
+  ],
+  "author": "Timothy Ruhle <timothy.ruhle@intellipharm.com.au>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Intellipharm/infiniselect/issues"
+  },
+  "homepage": "https://github.com/Intellipharm/infiniselect#readme",
+  "dependencies": {
+    "clusterize.js": "^0.17.6"
+  }
+}

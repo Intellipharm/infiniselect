@@ -19,7 +19,15 @@
             infiniselect.elements.search.focus();
             infiniselect.elements.wrapper.classList.add('infiniselect-wrapper-open');
             infiniselect.elements.dropdownWrapper.classList.add('infiniselect-dropdown-open');
+            
+            // set wrapper position
+            var bounding = infiniselect.elements.main.getBoundingClientRect();
+            console.log(infiniselect.elements.dropdownWrapper.style);
+            infiniselect.elements.dropdownWrapper.style.left = bounding.left + (window.scrollX || document.documentElement.scrollLeft) + 'px';
+            infiniselect.elements.dropdownWrapper.style.top = bounding.bottom + (window.scrollY || document.documentElement.scrollTop) + 'px';
+            infiniselect.elements.dropdownWrapper.style.width = bounding.width + 'px';
         };
+        
         infiniselect.close = function() {
             infiniselect.elements.search.blur();
             infiniselect.elements.wrapper.classList.remove('infiniselect-wrapper-open');
@@ -45,7 +53,7 @@
         
         var dropdown = document.createElement('div');
         dropdown.classList = 'infiniselect-dropdown-wrapper';
-        dropdown.innerHTML = '<div class="infiniselect-dropdown-actions"><button class="infiniselect-dropdown-action infiniselect-dropdown-show-selected">Show selected only</button><button class="infiniselect-dropdown-action infiniselect-dropdown-select-none">Select none</button><button class="infiniselect-dropdown-action infiniselect-dropdown-select-all">Select all</button></div><div class="infiniselect-dropdown-scroll clusterize-scroll"><div class="infiniselect-dropdown-content clusterize-content"><div class="infiniselect-dropdown-row clusterize-no-data">Loading items...</div></div></div>';
+        dropdown.innerHTML = '<div class="infiniselect-dropdown-actions"><button class="infiniselect-dropdown-action infiniselect-dropdown-show-selected">Show selected only</button><button class="infiniselect-dropdown-action infiniselect-dropdown-select-all">Select all</button><button class="infiniselect-dropdown-action infiniselect-dropdown-select-none">Select none</button></div><div class="infiniselect-dropdown-scroll clusterize-scroll"><div class="infiniselect-dropdown-content clusterize-content"><div class="infiniselect-dropdown-row infiniselect-dropdown-no-select clusterize-no-data">Loading items...</div></div></div>';
         document.body.appendChild(dropdown);
         
         infiniselect.elements.dropdownWrapper = dropdown;
@@ -59,15 +67,21 @@
     
     InfiniSelect.addEvents = function(infiniselect) {
         infiniselect.elements.dropdownShowSelected.addEventListener('click', function(event) {
-            InfiniSelect.showSelectedOnly(infiniselect);
+            if (!infiniselect.isLoading) {
+                InfiniSelect.showSelectedOnly(infiniselect);
+            }
         });
         
         infiniselect.elements.dropdownSelectNone.addEventListener('click', function(event) {
-            InfiniSelect.selectAll(infiniselect, false);
+            if (!infiniselect.isLoading) {
+                InfiniSelect.selectAll(infiniselect, false);
+            }
         });
         
         infiniselect.elements.dropdownSelectAll.addEventListener('click', function(event) {
-            InfiniSelect.selectAll(infiniselect, true);
+            if (!infiniselect.isLoading) {
+                InfiniSelect.selectAll(infiniselect, true);
+            }
         });
         
         window.addEventListener('mousedown', function(event) {
@@ -84,7 +98,7 @@
             
             if (isInInfiniSelect) {
                 infiniselect.open();
-                infiniselect.is_selecting = event.target.classList.contains('infiniselect-dropdown-row');
+                infiniselect.is_selecting = InfiniSelect.isSelectableRow(event.target);
                 infiniselect.is_selecting_element = null;
             } else {
                 infiniselect.close();
@@ -92,7 +106,7 @@
         });
         
         infiniselect.elements.dropdownContent.addEventListener('mousemove', function(event) {
-            if (infiniselect.is_selecting && infiniselect.is_selecting_element !== event.target.dataset.index && event.target.classList.contains('infiniselect-dropdown-row')) {
+            if (infiniselect.is_selecting && infiniselect.is_selecting_element !== event.target.dataset.index && InfiniSelect.isSelectableRow(event.target)) {
                 infiniselect.mouse_moved = true;
                 
                 InfiniSelect.toggleSelection(infiniselect, event.target.dataset.index);
@@ -119,8 +133,10 @@
             infiniselect.searchTimer = setTimeout(function() {
                 infiniselect.isSearching = infiniselect.searchValue !== '';
                 
+                infiniselect.elements.dropdownSelectAll.innerHTML = infiniselect.isSearching ? 'Select all filtered' : 'Select all';
+                
                 if (infiniselect.isSearching) {
-                    infiniselect.clusterize.update(InfiniSelect.transformData([{content: 'Searching for items...'}]));
+                    infiniselect.clusterize.update(InfiniSelect.transformData([{content: 'Searching for items...', selectable: false}]));
                     InfiniSelect.loadNextPage(infiniselect, false);
                 } else {
                     infiniselect.searchData = [];
@@ -142,12 +158,12 @@
         // show loading message
         if (infiniselect.clusterize) {
             if (showLoading !== false) {
-                infiniselect.clusterize.append(InfiniSelect.transformData([{content: 'Loading more items...'}]));
+                infiniselect.clusterize.append(InfiniSelect.transformData([{content: 'Loading more items...', selectable: false}]));
             }
             rowCount = infiniselect.clusterize.getRowsAmount();
         }
         
-        infiniselect.isLoading = true;
+        InfiniSelect.setLoading(infiniselect, true);
         
         if (infiniselect.isSearching) {
             infiniselect.options.search.call(infiniselect, infiniselect.searchValue, rowCount, function(response) {
@@ -160,7 +176,7 @@
                 
                 InfiniSelect.updateData(infiniselect);
                 
-                infiniselect.isLoading = false;
+                InfiniSelect.setLoading(infiniselect, false);
             });
         } else {
             // do call to get more data
@@ -180,7 +196,7 @@
                     InfiniSelect.updateData(infiniselect);
                 }
                 
-                infiniselect.isLoading = false;
+                InfiniSelect.setLoading(infiniselect, false);
             });
         }
     };
@@ -233,6 +249,7 @@
             rows: rows,
             scrollElem: infiniselect.elements.dropdownScroll,
             contentElem: infiniselect.elements.dropdownContent,
+            no_data_class: 'infiniselect-dropdown-row infiniselect-dropdown-no-select',
             callbacks: {
                 scrollingProgress: function(progress) {
                     if (infiniselect.elements.dropdownScroll.scrollTop >= infiniselect.elements.dropdownScroll.scrollHeight - infiniselect.elements.dropdownScroll.clientHeight - 200) {
@@ -274,6 +291,24 @@
         infiniselect.selectedCount = count;
         
         infiniselect.elements.search.setAttribute('placeholder', infiniselect.selectedCount === 1 ? '1 item selected' : infiniselect.selectedCount + ' items selected');
+    };
+    
+    InfiniSelect.isSelectableRow = function(element) {
+        return element.classList.contains('infiniselect-dropdown-row') && !element.classList.contains('infiniselect-dropdown-no-select');
+    };
+    
+    InfiniSelect.setLoading = function(infiniselect, status) {
+        infiniselect.isLoading = status;
+        
+        if (status) {
+            infiniselect.elements.dropdownShowSelected.setAttribute('disabled', 'disabled');
+            infiniselect.elements.dropdownSelectNone.setAttribute('disabled', 'disabled');
+            infiniselect.elements.dropdownSelectAll.setAttribute('disabled', 'disabled');
+        } else {
+            infiniselect.elements.dropdownShowSelected.removeAttribute('disabled');
+            infiniselect.elements.dropdownSelectNone.removeAttribute('disabled');
+            infiniselect.elements.dropdownSelectAll.removeAttribute('disabled');
+        }
     };
     
     window.InfiniSelect = InfiniSelect;

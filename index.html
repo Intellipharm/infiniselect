@@ -13,10 +13,37 @@
     <body>
         <h1>InfiniSelect Demo</h1>
         
-        <div id="my_box"></div>
+        
+        <div id="infiniselect1"></div>
+        <p>
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+            Here is some gap between the selectors just to make sure the positioning is fine.
+        </p>
+        <div id="infiniselect2"></div>
+        <p>
+            Here is soem gap after the last selector.
+        </p>
         
         <script>
-            var box = InfiniSelect(document.getElementById('my_box'), {
+            var infiniselect1 = InfiniSelect(document.getElementById('infiniselect1'), {
                 searchTimer: 500,
                 search: function(search, rowCount, callback) {
                     setTimeout(function() {
@@ -36,10 +63,36 @@
                         callback({
                             data: data
                         });
-                    }, 2500);
+                    }, 1);
                 }
             });
-            console.log(box);
+            console.log(infiniselect1);
+        </script>
+        <script>
+            var infiniselect2 = InfiniSelect(document.getElementById('infiniselect2'), {
+                searchTimer: 500,
+                search: function(search, rowCount, callback) {
+                    setTimeout(function() {
+                        callback({
+                            data: [{content: 'smith'}, {content: 'jones'}, {content: 'buble'}]
+                        });
+                    }, 2500);
+                },
+                loadNextPage: function(rowCount, callback) {
+                    var data = [];
+
+                    for (var i = rowCount + 35; i < rowCount + 1035; i++) {
+                        data = data.concat([{content: '<i class="fa fa-star fa-spin"></i> - ' + String.fromCharCode(i)}]);
+                    }
+                    
+                    setTimeout(function() {
+                        callback({
+                            data: data
+                        });
+                    }, 1);
+                }
+            });
+            console.log(infiniselect2);
         </script>
     </body>
 </html>

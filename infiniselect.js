@@ -22,7 +22,7 @@
             
             // set wrapper position
             var bounding = infiniselect.elements.main.getBoundingClientRect();
-            console.log(infiniselect.elements.dropdownWrapper.style);
+            //console.log(infiniselect.elements.dropdownWrapper.style);
             infiniselect.elements.dropdownWrapper.style.left = bounding.left + (window.scrollX || document.documentElement.scrollLeft) + 'px';
             infiniselect.elements.dropdownWrapper.style.top = bounding.bottom + (window.scrollY || document.documentElement.scrollTop) + 'px';
             infiniselect.elements.dropdownWrapper.style.width = bounding.width + 'px';
@@ -170,7 +170,9 @@
                 if (!infiniselect.searchData) {
                     infiniselect.searchData = [];
                 }
-                infiniselect.searchData = infiniselect.searchData.concat(response.data);
+
+                infiniselect.searchData = response.data;
+                //infiniselect.searchData = infiniselect.searchData.concat(response.data);
                 
                 infiniselect.data = infiniselect.searchData;
                 
@@ -184,7 +186,9 @@
                 if (!infiniselect.allData) {
                     infiniselect.allData = [];
                 }
-                infiniselect.allData = infiniselect.allData.concat(response.data);
+
+                infiniselect.allData = response.data;
+                //infiniselect.allData = infiniselect.allData.concat(response.data);
                 
                 infiniselect.data = infiniselect.allData;
                 

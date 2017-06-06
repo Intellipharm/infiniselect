@@ -86,7 +86,9 @@
 }
 
 .infiniselect-dropdown-row.infiniselect-dropdown-row-selected {
-    background-color: #A2EAFF;
+    /*background-color: #A2EAFF;*/
+    background-color: #1167bd;
+    color:#fff;
 }
 
 .infiniselect-dropdown-row.infiniselect-dropdown-row-selected:hover {

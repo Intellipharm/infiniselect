@@ -109,7 +109,8 @@
             if (infiniselect.is_selecting && infiniselect.is_selecting_element !== event.target.dataset.index && InfiniSelect.isSelectableRow(event.target)) {
                 infiniselect.mouse_moved = true;
                 
-                InfiniSelect.toggleSelection(infiniselect, event.target.dataset.index);
+                //InfiniSelect.toggleSelection(infiniselect, event.target.dataset.index);
+                InfiniSelect.toggleSelectionByContent(infiniselect, event.target.dataset.content);
                 infiniselect.is_selecting_element = event.target.dataset.index;
             }
         });
@@ -117,7 +118,8 @@
         window.addEventListener('mouseup', function(event) {
             // if just clicked one element
             if (infiniselect.is_selecting && !infiniselect.mouse_moved) {
-                InfiniSelect.toggleSelection(infiniselect, event.target.dataset.index);
+               // InfiniSelect.toggleSelection(infiniselect, event.target.dataset.index);
+               InfiniSelect.toggleSelectionByContent(infiniselect, event.target.dataset.content);
             }
             
             infiniselect.is_selecting = false;
@@ -187,6 +189,15 @@
                     infiniselect.allData = [];
                 }
 
+                for(var i = 0; i < response.data.length; i++) {
+                    var result = $.grep(infiniselect.allData, function(e) { return e.content == response.data[i].content; });
+                    if(result.length > 0) {
+                        if(result[0].selected) {
+                            response.data[i].selected = result[0].selected;
+                        }
+                    }
+                }
+
                 infiniselect.allData = response.data;
                 //infiniselect.allData = infiniselect.allData.concat(response.data);
                 
@@ -215,7 +226,7 @@
                 classes += ' infiniselect-dropdown-row-selected';
             }
             
-            rows.push('<div class="' + classes + '" data-index="' + i + '">' + data[i].content + '</div>');
+            rows.push('<div class="' + classes + '" data-index="' + i + '" data-content="' + data[i].content + '">' + data[i].content + '</div>');
         }
         
         return rows;
@@ -275,6 +286,27 @@
             infiniselect.selectedCount++;
         } else {
             infiniselect.selectedCount--;
+        }
+        
+        InfiniSelect.updateCountSelected(infiniselect, infiniselect.selectedCount);
+        
+        InfiniSelect.updateData(infiniselect);
+    };
+
+    InfiniSelect.toggleSelectionByContent = function(infiniselect, content) {
+        for (var i = 0; i < infiniselect.allData.length; i++) {
+            if(infiniselect.allData[i].content == content) {
+                infiniselect.allData[i].selected = !infiniselect.allData[i].selected;
+                if (!infiniselect.selectedCount) {
+                    infiniselect.selectedCount = 0;
+                }
+                
+                if (infiniselect.allData[i].selected) {
+                    infiniselect.selectedCount++;
+                } else {
+                    infiniselect.selectedCount--;
+                }
+            }
         }
         
         InfiniSelect.updateCountSelected(infiniselect, infiniselect.selectedCount);

@@ -189,14 +189,16 @@
                     infiniselect.allData = [];
                 }
 
-                for(var i = 0; i < response.data.length; i++) {
+                // The following loops has been disabled to performance issue. Needs to revisited 
+
+                /*for(var i = 0; i < response.data.length; i++) {
                     var result = $.grep(infiniselect.allData, function(e) { return e.content == response.data[i].content; });
                     if(result.length > 0) {
                         if(result[0].selected) {
                             response.data[i].selected = result[0].selected;
                         }
                     }
-                }
+                }*/
 
                 infiniselect.allData = response.data;
                 //infiniselect.allData = infiniselect.allData.concat(response.data);
@@ -218,7 +220,6 @@
     
     InfiniSelect.transformData = function(data) {
         var rows = [];
-        
         for (var i = 0; i < data.length; i++) {
             var classes = 'infiniselect-dropdown-row';
             

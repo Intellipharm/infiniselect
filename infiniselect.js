@@ -11,9 +11,10 @@
     };
     
     InfiniSelect.init = function(infiniselect, element, options) {
+        
         // setup options
         infiniselect.options = options;
-        
+        infiniselect.isOpened = false;
         // setup functions
         infiniselect.open = function() {
             infiniselect.elements.search.focus();
@@ -26,12 +27,14 @@
             infiniselect.elements.dropdownWrapper.style.left = bounding.left + (window.scrollX || document.documentElement.scrollLeft) + 'px';
             infiniselect.elements.dropdownWrapper.style.top = bounding.bottom + (window.scrollY || document.documentElement.scrollTop) + 'px';
             infiniselect.elements.dropdownWrapper.style.width = bounding.width + 'px';
+            infiniselect.isOpened = true;
         };
         
         infiniselect.close = function() {
             infiniselect.elements.search.blur();
             infiniselect.elements.wrapper.classList.remove('infiniselect-wrapper-open');
             infiniselect.elements.dropdownWrapper.classList.remove('infiniselect-dropdown-open');
+            infiniselect.isOpened = false;
         };
         
         // setup elements
@@ -87,6 +90,7 @@
         window.addEventListener('mousedown', function(event) {
             // is the clicked element inside the infiniselect elements
             var isInInfiniSelect = false;
+            var isInputWrapper = ((event.target === infiniselect.elements.search) || (event.target === infiniselect.elements.wrapper));
             for (element in infiniselect.elements) {
                 if (infiniselect.elements[element] === event.target || infiniselect.elements[element] === event.target.parentNode) {
                     isInInfiniSelect = true;
@@ -97,9 +101,13 @@
             infiniselect.mouse_moved = false;
             
             if (isInInfiniSelect) {
-                infiniselect.open();
-                infiniselect.is_selecting = InfiniSelect.isSelectableRow(event.target);
-                infiniselect.is_selecting_element = null;
+                if((isInputWrapper && !infiniselect.isOpened) || !isInputWrapper) {
+                    infiniselect.open();
+                    infiniselect.is_selecting = InfiniSelect.isSelectableRow(event.target);
+                    infiniselect.is_selecting_element = null;
+                } else {
+                    infiniselect.close();
+                }
             } else {
                 infiniselect.close();
             }
@@ -189,8 +197,8 @@
                     infiniselect.allData = [];
                 }
 
-                // The following loops has been disabled to performance issue. Needs to revisited 
-
+                 // The following loops has been disabled to performance issue. Needs to revisited
+                 
                 /*for(var i = 0; i < response.data.length; i++) {
                     var result = $.grep(infiniselect.allData, function(e) { return e.content == response.data[i].content; });
                     if(result.length > 0) {

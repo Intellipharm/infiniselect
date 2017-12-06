@@ -49,8 +49,10 @@
         infiniselect.elements = {
             main: element
         };
-        
-        infiniselect.elements.main.innerHTML = '<div class="infiniselect-wrapper"><input type="text" class="infiniselect-search" placeholder="0 items selected" /></div>';
+
+        var placeHolder = infiniselect.options.defaultSelection == 'all' ? 'All items selected' : '0 items selected';
+
+        infiniselect.elements.main.innerHTML = '<div class="infiniselect-wrapper"><input type="text" class="infiniselect-search" placeholder="'+ placeHolder +'" /></div>';
         infiniselect.elements.wrapper = infiniselect.elements.main.querySelector('.infiniselect-wrapper');
         infiniselect.elements.search = infiniselect.elements.main.querySelector('.infiniselect-search');
         
@@ -334,8 +336,12 @@
     
     InfiniSelect.updateCountSelected = function(infiniselect, count) {
         infiniselect.selectedCount = count;
+        var placeHolder = infiniselect.selectedCount === 1 ? '1 item selected' : infiniselect.selectedCount + ' items selected';
+        if(infiniselect.options.defaultSelection == 'all' && infiniselect.selectedCount == 0) {
+            placeHolder = 'All items selected';
+        }
         
-        infiniselect.elements.search.setAttribute('placeholder', infiniselect.selectedCount === 1 ? '1 item selected' : infiniselect.selectedCount + ' items selected');
+        infiniselect.elements.search.setAttribute('placeholder', placeHolder);        
     };
     
     InfiniSelect.isSelectableRow = function(element) {

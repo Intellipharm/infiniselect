@@ -50,7 +50,7 @@
             main: element
         };
 
-        var placeHolder = infiniselect.options.defaultSelection == 'all' ? 'All items selected' : '0 items selected';
+        var placeHolder = infiniselect.options.defaultSelection == 'all' ? '(All)' : '0 items selected';
 
         infiniselect.elements.main.innerHTML = '<div class="infiniselect-wrapper"><input type="text" class="infiniselect-search" placeholder="'+ placeHolder +'" /></div>';
         infiniselect.elements.wrapper = infiniselect.elements.main.querySelector('.infiniselect-wrapper');
@@ -338,7 +338,7 @@
         infiniselect.selectedCount = count;
         var placeHolder = infiniselect.selectedCount === 1 ? '1 item selected' : infiniselect.selectedCount + ' items selected';
         if(infiniselect.options.defaultSelection == 'all' && infiniselect.selectedCount == 0) {
-            placeHolder = 'All items selected';
+            placeHolder = '(All)';
         }
         
         infiniselect.elements.search.setAttribute('placeholder', placeHolder);        

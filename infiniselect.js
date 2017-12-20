@@ -337,7 +337,7 @@
     InfiniSelect.updateCountSelected = function(infiniselect, count) {
         infiniselect.selectedCount = count;
         var placeHolder = infiniselect.selectedCount === 1 ? '1 item selected' : infiniselect.selectedCount + ' items selected';
-        if(infiniselect.options.defaultSelection == 'all' && infiniselect.selectedCount == 0) {
+        if(infiniselect.options.defaultSelection == 'all' && (infiniselect.selectedCount == 0 || infiniselect.selectedCount == infiniselect.data.length)) {
             placeHolder = '(All)';
         }
         

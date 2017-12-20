@@ -79,12 +79,16 @@
         
         infiniselect.elements.dropdownSelectNone.addEventListener('click', function(event) {
             if (!infiniselect.isLoading) {
+                infiniselect.elements.dropdownSelectNone.setAttribute('disabled', 'disabled');
+                infiniselect.elements.dropdownSelectAll.removeAttribute('disabled');
                 InfiniSelect.selectAll(infiniselect, false);
             }
         });
         
         infiniselect.elements.dropdownSelectAll.addEventListener('click', function(event) {
             if (!infiniselect.isLoading) {
+                infiniselect.elements.dropdownSelectAll.setAttribute('disabled', 'disabled');
+                infiniselect.elements.dropdownSelectNone.removeAttribute('disabled');
                 InfiniSelect.selectAll(infiniselect, true);
             }
         });
@@ -337,7 +341,7 @@
     InfiniSelect.updateCountSelected = function(infiniselect, count) {
         infiniselect.selectedCount = count;
         var placeHolder = infiniselect.selectedCount === 1 ? '1 item selected' : infiniselect.selectedCount + ' items selected';
-        if(infiniselect.options.defaultSelection == 'all' && (infiniselect.selectedCount == 0 || infiniselect.selectedCount == infiniselect.data.length)) {
+        if(infiniselect.options.defaultSelection == 'all' && (infiniselect.selectedCount == 0 || infiniselect.selectedCount == infiniselect.allData.length)) {
             placeHolder = '(All)';
         }
         

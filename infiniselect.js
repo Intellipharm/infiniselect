@@ -330,6 +330,12 @@
     };
     
     InfiniSelect.selectAll = function(infiniselect, toggle) {
+        
+        if (infiniselect.data.length == 0) {
+            infiniselect.data = infiniselect.allData;
+            infiniselect.elements.dropdownShowSelected.innerHTML = 'Show all';
+        }
+
         for (var i = 0; i < infiniselect.data.length; i++) {
             infiniselect.data[i].selected = toggle;
         }

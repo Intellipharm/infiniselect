@@ -117,6 +117,8 @@
             } else {
                 infiniselect.close();
             }
+            infiniselect.elements.dropdownSelectNone.removeAttribute('disabled');
+            infiniselect.elements.dropdownSelectAll.removeAttribute('disabled');
         });
         
         infiniselect.elements.dropdownContent.addEventListener('mousemove', function(event) {
@@ -202,6 +204,10 @@
                 if (!infiniselect.allData) {
                     infiniselect.allData = [];
                 }
+
+                var selectedItems = $.grep(response.data, function(element, index) { return element.selected == true; });
+                
+                InfiniSelect.updateCountSelected(infiniselect, selectedItems.length);
 
                  // The following loops has been disabled to performance issue. Needs to revisited
                  

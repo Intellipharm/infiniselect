@@ -57,8 +57,24 @@
         infiniselect.elements.search = infiniselect.elements.main.querySelector('.infiniselect-search');
         
         var dropdown = document.createElement('div');
-        dropdown.classList = 'infiniselect-dropdown-wrapper';
+
+        // if element already exists in dom
+        if(infiniselect.options.id) {
+            var existingElem = document.getElementById(infiniselect.options.id);
+            if(existingElem) {
+                dropdown = document.getElementById(infiniselect.options.id);
+            } else {
+                dropdown.setAttribute("id", infiniselect.options.id);
+            }
+        }
+
+        
+        if(!dropdown.classList.contains("infiniselect-dropdown-wrapper")) {
+            dropdown.classList = 'infiniselect-dropdown-wrapper';
+        }
+
         dropdown.innerHTML = '<div class="infiniselect-dropdown-actions"><button class="infiniselect-dropdown-action infiniselect-dropdown-show-selected">Show selected only</button><button class="infiniselect-dropdown-action infiniselect-dropdown-select-all">Select all</button><button class="infiniselect-dropdown-action infiniselect-dropdown-select-none">Select none</button></div><div class="infiniselect-dropdown-scroll clusterize-scroll"><div class="infiniselect-dropdown-content clusterize-content"><div class="infiniselect-dropdown-row infiniselect-dropdown-no-select clusterize-no-data">Loading items...</div></div></div>';
+
         document.body.appendChild(dropdown);
         
         infiniselect.elements.dropdownWrapper = dropdown;
@@ -239,6 +255,10 @@
     };
     
     InfiniSelect.transformData = function(data) {
+        if(data.length == 0) {
+            data = [{content: 'No data', selectable: false}];
+        }
+
         var rows = [];
         for (var i = 0; i < data.length; i++) {
             var classes = 'infiniselect-dropdown-row';

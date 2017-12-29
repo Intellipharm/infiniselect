@@ -127,3 +127,18 @@
 .infiniselect-dropdown-action:focus {
     outline: none !important;
 }
+
+@media only screen and (max-width: 1024px) {
+
+   .infiniselect-dropdown-show-selected {
+    width: 39% !important; 
+  }
+
+  .infiniselect-dropdown-select-all {
+    width: 20% !important;
+  }
+
+  .infiniselect-dropdown-select-none {
+    width: 33% !important;
+  }
+}

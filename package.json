@@ -1,6 +1,6 @@
 {
   "name": "infiniselect",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Infinite Scroll Select Box",
   "main": "infiniselect.js",
   "repository": {

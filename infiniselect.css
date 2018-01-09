@@ -131,16 +131,16 @@
 @media only screen and (max-width: 1024px) {
 
    .infiniselect-dropdown-show-selected {
-    width: 39% !important; 
-  }
+        width: 100% !important; 
+    }
 
-  .infiniselect-dropdown-select-all {
-    width: 20% !important;
-  }
+    .infiniselect-dropdown-select-all {
+        width: 100% !important;
+    }
 
-  .infiniselect-dropdown-select-none {
-    width: 33% !important;
-  }
+    .infiniselect-dropdown-select-none {
+        width: 100% !important;
+    }
 }
 
 .infiniselect-dropdown-open {

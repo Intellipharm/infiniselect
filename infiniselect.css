@@ -142,3 +142,7 @@
     width: 33% !important;
   }
 }
+
+.infiniselect-dropdown-open {
+    position: absolute !important;
+}

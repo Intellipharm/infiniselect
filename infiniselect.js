@@ -50,7 +50,7 @@
             main: element
         };
 
-        var placeHolder = infiniselect.options.defaultSelection == 'all' ? '(All)' : '0 items selected';
+        var placeHolder = '0 items selected';
 
         infiniselect.elements.main.innerHTML = '<div class="infiniselect-wrapper"><input type="text" class="infiniselect-search" placeholder="'+ placeHolder +'" /></div>';
         infiniselect.elements.wrapper = infiniselect.elements.main.querySelector('.infiniselect-wrapper');
@@ -221,11 +221,7 @@
                     infiniselect.allData = [];
                 }
 
-                var selectedItems = $.grep(response.data, function(element, index) { return element.selected == true; });
-                
-                InfiniSelect.updateCountSelected(infiniselect, selectedItems.length);
-
-                 // The following loops has been disabled to performance issue. Needs to revisited
+                // The following loops has been disabled to performance issue. Needs to revisited
                  
                 /*for(var i = 0; i < response.data.length; i++) {
                     var result = $.grep(infiniselect.allData, function(e) { return e.content == response.data[i].content; });
@@ -241,6 +237,10 @@
                 
                 infiniselect.data = infiniselect.allData;
                 
+                var selectedItems = $.grep(response.data, function(element, index) { return element.selected == true; });
+                
+                InfiniSelect.updateCountSelected(infiniselect, selectedItems.length);
+
                 // initialise clusterize if not setup
                 if (!infiniselect.clusterize) {
                     var rows = InfiniSelect.transformData(infiniselect.allData);
@@ -373,10 +373,11 @@
     InfiniSelect.updateCountSelected = function(infiniselect, count) {
         infiniselect.selectedCount = count;
         var placeHolder = infiniselect.selectedCount === 1 ? '1 item selected' : infiniselect.selectedCount + ' items selected';
-        if(infiniselect.options.defaultSelection == 'all' && (infiniselect.selectedCount == 0 || infiniselect.selectedCount == infiniselect.allData.length)) {
+
+        if(infiniselect.selectedCount == infiniselect.allData.length) {
             placeHolder = '(All)';
         }
-        
+
         infiniselect.elements.search.setAttribute('placeholder', placeHolder);        
     };
     

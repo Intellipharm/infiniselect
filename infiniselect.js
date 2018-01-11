@@ -52,7 +52,7 @@
 
         var placeHolder = '0 items selected';
 
-        infiniselect.elements.main.innerHTML = '<div class="infiniselect-wrapper"><input type="text" class="infiniselect-search" placeholder="'+ placeHolder +'" /></div>';
+        infiniselect.elements.main.innerHTML = '<div class="infiniselect-wrapper"><input type="text" autocomplete="off" class="infiniselect-search" placeholder="'+ placeHolder +'" /></div>';
         infiniselect.elements.wrapper = infiniselect.elements.main.querySelector('.infiniselect-wrapper');
         infiniselect.elements.search = infiniselect.elements.main.querySelector('.infiniselect-search');
         
@@ -70,7 +70,7 @@
 
         
         if(!dropdown.classList.contains("infiniselect-dropdown-wrapper")) {
-            dropdown.classList = 'infiniselect-dropdown-wrapper';
+            dropdown.classList.add('infiniselect-dropdown-wrapper');
         }
 
         dropdown.innerHTML = '<div class="infiniselect-dropdown-actions"><button class="infiniselect-dropdown-action infiniselect-dropdown-show-selected">Show selected only</button><button class="infiniselect-dropdown-action infiniselect-dropdown-select-all">Select all</button><button class="infiniselect-dropdown-action infiniselect-dropdown-select-none">Select none</button></div><div class="infiniselect-dropdown-scroll clusterize-scroll"><div class="infiniselect-dropdown-content clusterize-content"><div class="infiniselect-dropdown-row infiniselect-dropdown-no-select clusterize-no-data">Loading items...</div></div></div>';

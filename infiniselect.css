@@ -128,7 +128,7 @@
     outline: none !important;
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1150px) {
 
    .infiniselect-dropdown-show-selected {
         width: 100% !important; 

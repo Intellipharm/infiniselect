@@ -335,6 +335,8 @@
     };
 
     InfiniSelect.toggleSelectionByContent = function(infiniselect, content) {
+
+        var found = false;
         for (var i = 0; i < infiniselect.allData.length; i++) {
             if(infiniselect.allData[i].content == content) {
                 infiniselect.allData[i].selected = !infiniselect.allData[i].selected;
@@ -347,9 +349,32 @@
                 } else {
                     infiniselect.selectedCount--;
                 }
+                found = true;
             }
         }
-        
+
+        // Add selected item from Ajax search result to allData
+        if(!found) {
+            for (var i = 0; i < infiniselect.data.length; i++) {
+                if(infiniselect.data[i].content == content) {
+                    infiniselect.data[i].selected = !infiniselect.data[i].selected;
+                    if (!infiniselect.selectedCount) {
+                        infiniselect.selectedCount = 0;
+                    }
+                    
+                    if (infiniselect.data[i].selected) {
+                        infiniselect.selectedCount++;
+                    } else {
+                        infiniselect.selectedCount--;
+                    }
+                    found = true;
+                }
+            }
+
+            $row = { content: content, selected: true };
+            infiniselect.allData.push($row);
+        }
+
         InfiniSelect.updateCountSelected(infiniselect, infiniselect.selectedCount);
         
         InfiniSelect.updateData(infiniselect);

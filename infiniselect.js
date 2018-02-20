@@ -308,8 +308,10 @@
             no_data_class: 'infiniselect-dropdown-row infiniselect-dropdown-no-select',
             callbacks: {
                 scrollingProgress: function(progress) {
-                    if (infiniselect.elements.dropdownScroll.scrollTop >= infiniselect.elements.dropdownScroll.scrollHeight - infiniselect.elements.dropdownScroll.clientHeight - 200) {
-                        InfiniSelect.loadNextPage(infiniselect);
+                    if(!infiniselect.options.disableScrollCall) {
+                        if (infiniselect.elements.dropdownScroll.scrollTop >= infiniselect.elements.dropdownScroll.scrollHeight - infiniselect.elements.dropdownScroll.clientHeight - 200) {
+                            InfiniSelect.loadNextPage(infiniselect);
+                        }
                     }
                 }
             }
@@ -414,10 +416,12 @@
         infiniselect.isLoading = status;
         
         if (status) {
+            infiniselect.elements.search.setAttribute('placeholder', 'Loading items...');
             infiniselect.elements.dropdownShowSelected.setAttribute('disabled', 'disabled');
             infiniselect.elements.dropdownSelectNone.setAttribute('disabled', 'disabled');
             infiniselect.elements.dropdownSelectAll.setAttribute('disabled', 'disabled');
         } else {
+            InfiniSelect.updateCountSelected(infiniselect, infiniselect.selectedCount);
             infiniselect.elements.dropdownShowSelected.removeAttribute('disabled');
             infiniselect.elements.dropdownSelectNone.removeAttribute('disabled');
             infiniselect.elements.dropdownSelectAll.removeAttribute('disabled');
